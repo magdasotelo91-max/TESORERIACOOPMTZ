@@ -72,11 +72,6 @@ main{max-width:1400px;margin:0 auto;padding:14px 24px 100px}
 /* Desktop: entradas + salidas lado a lado */
 @media(min-width:900px){
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
-  .res-grid{grid-template-columns:1fr 1fr 1fr}
-  .rc.hero{grid-column:span 3}
-  .rc.full{grid-column:span 3}
-  .rc.red.full{grid-column:span 3}
-  .banco-grid{grid-template-columns:1fr 1fr 1fr}
   .bot-btn{max-width:200px}
 }
 
@@ -153,6 +148,15 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 .banco-grid{display:grid;grid-template-columns:1fr;gap:10px;padding:0 16px 16px}
 .banco-item{background:var(--input-bg);border-radius:12px;padding:12px 14px;border:1.5px solid var(--line)}
 .banco-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+/* Resumen y bloques no-two-col: max-width centrado en desktop */
+@media(min-width:900px){
+  .res-wrap{max-width:860px;margin:0 auto}
+  .banco-grid{grid-template-columns:1fr 1fr 1fr}
+  .res-grid{grid-template-columns:1fr 1fr 1fr}
+  .rc.full{grid-column:span 3}
+  .rc.red.full{grid-column:span 3}
+  .rc.hero{grid-column:span 3}
+}
 
 /* FIRMAS */
 .firmas-card{background:white;border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
@@ -248,6 +252,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
 
 <!-- MENSUAL -->
 <div id="page-mensual" class="page active">
+  <div class="res-wrap">
   <div class="meta-card">
     <div class="field full"><label>Escuela / Institución</label><input type="text" id="escuela" placeholder="Ej: E.P. N° 14 José de San Martín"></div>
     <div class="field full"><label>Localidad / Distrito</label><input type="text" id="distrito" placeholder="Ej: San Justo, La Matanza"></div>
@@ -260,6 +265,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
     </div>
     <div class="field"><label>Año</label><input type="number" id="anio" placeholder="2025" min="2000" max="2099"></div>
   </div>
+  </div><!-- /res-wrap meta mensual -->
 
   <!-- ENTRADAS + SALIDAS en 2 columnas en desktop -->
   <div class="two-col">
@@ -350,6 +356,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
   </div><!-- /two-col -->
 
   <!-- RESUMEN MENSUAL -->
+  <div class="res-wrap">
   <div class="block" id="blk-res">
     <div class="block-head" onclick="toggle('blk-res')"><span class="block-head-icon">📊</span><span class="block-head-title r">RESUMEN MENSUAL</span><span class="chevron">▼</span></div>
     <div class="block-body">
@@ -369,10 +376,12 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
       <div id="saldo-alerta" style="display:none;margin:0 16px 14px;padding:10px 14px;border-radius:10px;font-size:.82rem;font-weight:700"></div>
     </div>
   </div>
+  </div><!-- /res-wrap -->
 </div>
 
 <!-- ANUAL -->
 <div id="page-anual" class="page">
+  <div class="res-wrap">
 
   <!-- Período del ejercicio -->
   <div class="meta-card" style="border-top-color:var(--rose1)">
@@ -414,6 +423,8 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
     </div>
     <div id="acum-log" style="padding:0 16px 12px;font-size:.75rem;color:var(--muted);display:none"></div>
   </div>
+
+  </div><!-- /res-wrap top anual -->
 
   <!-- ENTRADAS + SALIDAS ANUALES en 2 columnas en desktop -->
   <div class="two-col">
@@ -493,6 +504,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
 
   </div><!-- /two-col anual -->
 
+  <div class="res-wrap">
   <!-- RESUMEN ANUAL -->
   <div class="block" id="blk-ares">
     <div class="block-head" onclick="toggle('blk-ares')">
@@ -527,6 +539,8 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
   <div style="padding:0 0 8px">
     <button onclick="generarPDFAnual()" style="width:100%;padding:14px;background:var(--grad);color:white;border:none;border-radius:var(--radius);font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(94,184,224,.3)">📄 Descargar Balance Anual PDF</button>
   </div>
+
+  </div><!-- /res-wrap bottom anual -->
 
 </div>
 
@@ -995,33 +1009,6 @@ function generarLibroPDF(){
   }
   y+=1;
   y=totalRow(y,'TOTAL SALIDAS',tS,RED_LT,RED,RED);
-
-  // Síntesis final — igual al modelo oficial PDF
-  y+=4;
-  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...MUTED);
-  doc.text('Resumen del mes:',ML+2,y);y+=4;
-  y=dataRow(y,'Total Entradas',tE,7,true,[240,250,255],GREEN,GREEN);
-  {
-    const rh=7;
-    doc.setFillColor(...GOLD_LT);doc.rect(ML,y,CW,rh,'F');
-    doc.setDrawColor(220,200,120);doc.setLineWidth(0.2);doc.line(ML,y+rh,ML+CW,y+rh);
-    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...INK);
-    doc.text('Saldo Mes Anterior',ML+2,y+rh-1.8);
-    doc.setTextColor(...GOLD);doc.text(fmtP(sa)||'$ 0,00',ML+CW-1.5,y+rh-1.8,{align:'right'});
-    y+=rh;
-  }
-  y=totalRow(y,'Total General (Entradas + Saldo Anterior)',tG,GOLD_LT,INK,GOLD);
-  y=dataRow(y,'Total Salidas',tS,7,true,RED_LT,RED,RED);
-  y=totalRow(y,'SALDO PRÓXIMO EJERCICIO',sp,[232,248,254],sp>=0?GREEN:RED,sp>=0?GREEN:RED);
-  // Detalle saldo
-  if(v('b_cc')>0||v('b_pf')>0||v('b_ef')>0){
-    y+=3;
-    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...MUTED);
-    doc.text('Detalle del saldo:',ML+2,y);y+=4;
-    y=dataRow(y,'En Banco — Cuenta Corriente',v('b_cc'),6,false,null,INK,GREEN);
-    y=dataRow(y,'En Banco — Plazo Fijo',v('b_pf'),6,false,null,INK,GREEN);
-    y=dataRow(y,'En Caja Chica (efectivo)',v('b_ef'),6,false,null,INK,GREEN);
-  }
 
   firmasBar([
     ['Rev. de Cuentas Titular',''],
