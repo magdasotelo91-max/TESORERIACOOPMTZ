@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="theme-color" content="#4a90b8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Tesorería — Cooperadora Escolar MTZ</title>
+<title>Tesorería — Cooperadora Escolar</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -345,12 +345,13 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
         <div class="rc red"><div class="rc-lbl">Total Salidas</div><div class="rc-val red" id="r_s">$ 0,00</div></div>
         <div class="rc hero"><div class="rc-lbl">SALDO PRÓXIMO EJERCICIO</div><div class="rc-val" id="r_sp">$ 0,00</div></div>
       </div>
-      <div class="subsec" style="margin:0 16px 4px;padding-left:0;padding-right:0"><div class="subsec-title">Detalle del Saldo</div></div>
+      <div class="subsec" style="margin:0 16px 4px;padding-left:0;padding-right:0"><div class="subsec-title">Detalle del Saldo (debe coincidir con Saldo Próximo Ejercicio)</div></div>
       <div class="banco-grid">
-        <div class="banco-item"><div class="banco-lbl">🏦 Cuenta Corriente</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_cc" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
-        <div class="banco-item"><div class="banco-lbl">📈 Plazo Fijo</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_pf" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
-        <div class="banco-item"><div class="banco-lbl">💵 Efectivo en Caja</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_ef" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">🏦 En Banco — Cuenta Corriente</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_cc" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">📈 En Banco — Plazo Fijo</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_pf" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">💵 En Caja Chica (efectivo)</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="b_ef" placeholder="0" step="0.01" min="0" oninput="calc()"></div></div>
       </div>
+      <div id="saldo-alerta" style="display:none;margin:0 16px 14px;padding:10px 14px;border-radius:10px;font-size:.82rem;font-weight:700"></div>
     </div>
   </div>
 </div>
@@ -481,15 +482,17 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
       <div class="res-grid">
         <div class="rc gold full"><div class="rc-lbl">Saldo del Ejercicio Anterior</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_saldo_ant" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="rc"><div class="rc-lbl">Total Entradas</div><div class="rc-val" id="aa_r_e">$ 0,00</div></div>
-        <div class="rc"><div class="rc-lbl">Total de Entradas (Ent.+Saldo Ant.)</div><div class="rc-val" id="aa_r_tg">$ 0,00</div></div>
+        <div class="rc"><div class="rc-lbl">Total General (Entradas + Saldo Ant.)</div><div class="rc-val" id="aa_r_tg">$ 0,00</div></div>
         <div class="rc red full"><div class="rc-lbl">Total de Salidas</div><div class="rc-val red" id="aa_r_s">$ 0,00</div></div>
         <div class="rc hero"><div class="rc-lbl">SALDO PRÓXIMO EJERCICIO</div><div class="rc-val" id="aa_r_sp">$ 0,00</div></div>
       </div>
       <div class="subsec" style="margin:0 16px 4px;padding-left:0;padding-right:0"><div class="subsec-title">Detalle del Saldo</div></div>
       <div class="banco-grid">
-        <div class="banco-item"><div class="banco-lbl">🏦 Cuenta Corriente</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_cc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="banco-item"><div class="banco-lbl">📈 Plazo Fijo</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_pf" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="banco-item"><div class="banco-lbl">💵 Caja Chica</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_ef" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">🏦 En Banco — Cuenta Corriente</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_cc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">📈 En Banco — Plazo Fijo</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_pf" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="banco-item"><div class="banco-lbl">💵 En Caja Chica (efectivo)</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_ef" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+      </div>
+      <div id="saldo-alerta-anual" style="display:none;margin:0 16px 4px;padding:10px 14px;border-radius:10px;font-size:.82rem;font-weight:700"></div>
       </div>
       <!-- Meses acumulados -->
       <div style="padding:8px 16px 14px">
@@ -513,7 +516,10 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
 <div class="watermark"><img id="wm-img" alt="MTZ"></div>
 
 <div class="bottom-bar">
-  <button class="bot-btn pdf" onclick="generarLibroPDF()"><span class="bicon">📄</span>Libro PDF</button>
+  <button class="bot-btn save" onclick="guardar()"><span class="bicon">💾</span>Guardar</button>
+  <button class="bot-btn load" onclick="cargar()"><span class="bicon">📂</span>Cargar</button>
+  <button class="bot-btn pdf" onclick="generarLibroPDF()"><span class="bicon">📄</span>PDF Mensual</button>
+  <button class="bot-btn excel" onclick="exportExcel()"><span class="bicon">📊</span>Excel</button>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -546,6 +552,20 @@ function calc(){
   const sa=v('saldo_ant'),tG=tE+sa,sP2=tG-tS;
   setT('r_e',tE);setT('r_s',tS);setT('r_tg',tG);setT('r_sp',sP2);
   const el=g('r_sp');if(el)el.classList.toggle('red',sP2<0);
+  // Validar detalle del saldo
+  const sumBanco=v('b_cc')+v('b_pf')+v('b_ef');
+  const alerta=g('saldo-alerta');
+  if(alerta&&(v('b_cc')>0||v('b_pf')>0||v('b_ef')>0)){
+    alerta.style.display='block';
+    const dif=Math.abs(sumBanco-sP2);
+    if(dif<0.05){
+      alerta.style.background='#e8f5ee';alerta.style.color='var(--green)';alerta.style.border='1.5px solid #a8d8b8';
+      alerta.innerHTML='✅ El detalle del saldo coincide con el Saldo Próximo Ejercicio. ✔';
+    } else {
+      alerta.style.background='#fdecea';alerta.style.color='var(--red)';alerta.style.border='1.5px solid #f5b7b1';
+      alerta.innerHTML='⚠ El detalle del saldo (<strong>'+fmt(sumBanco)+'</strong>) no coincide con el Saldo Próximo Ejercicio (<strong>'+fmt(sP2)+'</strong>). Verificar.';
+    }
+  } else if(alerta){alerta.style.display='none';}
 }
 
 // ── BALANCE ANUAL — lógica acumulativa con storage ──
@@ -564,13 +584,28 @@ function calcAnualBalance(){
   setT('aa_tot_s',tS); g('bdg-as').textContent=fmt(tS);
   setT('aa_r_e',tE); setT('aa_r_tg',tG); setT('aa_r_s',tS); setT('aa_r_sp',sp);
   const el=g('aa_r_sp'); if(el) el.classList.toggle('red',sp<0);
+  // Validar detalle del saldo anual
+  const sumBA=v('aa_b_cc')+v('aa_b_pf')+v('aa_b_ef');
+  const alertaA=g('saldo-alerta-anual');
+  if(alertaA&&(v('aa_b_cc')>0||v('aa_b_pf')>0||v('aa_b_ef')>0)){
+    alertaA.style.display='block';
+    const dif=Math.abs(sumBA-sp);
+    if(dif<0.05){
+      alertaA.style.background='#e8f5ee';alertaA.style.color='var(--green)';alertaA.style.border='1.5px solid #a8d8b8';
+      alertaA.innerHTML='✅ El detalle del saldo coincide con el Saldo Próximo Ejercicio. ✔';
+    } else {
+      alertaA.style.background='#fdecea';alertaA.style.color='var(--red)';alertaA.style.border='1.5px solid #f5b7b1';
+      alertaA.innerHTML='⚠ El detalle (<strong>'+fmt(sumBA)+'</strong>) no coincide con el Saldo Próximo (<strong>'+fmt(sp)+'</strong>). Verificar.';
+    }
+  } else if(alertaA){alertaA.style.display='none';}
   guardarAnual();
 }
 
 // ── ACUMULAR MES ──
 function acumularMes(){
-  const mes=g('mes').value, anio=g('anio').value;
-  if(!mes){toast('⚠️ Seleccioná un mes primero');return;}
+  const mes=g('acum_mes').value||(g('mes').value||'');
+  const anio=g('acum_anio').value||(g('anio').value||new Date().getFullYear());
+  if(!mes){toast('⚠️ Seleccioná un mes para acumular');return;}
   let acumulados=[];
   try{acumulados=JSON.parse(localStorage.getItem('coope_anual_meses')||'[]');}catch{}
   const tag=mes+' '+anio;
@@ -941,13 +976,32 @@ function generarLibroPDF(){
   y+=1;
   y=totalRow(y,'TOTAL SALIDAS',tS,RED_LT,RED,RED);
 
-  // Síntesis final
+  // Síntesis final — igual al modelo oficial PDF
   y+=4;
   doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...MUTED);
-  doc.text('Síntesis del mes:',ML+2,y);y+=4;
-  y=dataRow(y,'Total Entradas del mes',tE,7,true,[240,250,255],GREEN,GREEN);
-  y=dataRow(y,'Total Salidas del mes',tS,7,true,RED_LT,RED,RED);
+  doc.text('Resumen del mes:',ML+2,y);y+=4;
+  y=dataRow(y,'Total Entradas',tE,7,true,[240,250,255],GREEN,GREEN);
+  {
+    const rh=7;
+    doc.setFillColor(...GOLD_LT);doc.rect(ML,y,CW,rh,'F');
+    doc.setDrawColor(220,200,120);doc.setLineWidth(0.2);doc.line(ML,y+rh,ML+CW,y+rh);
+    doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...INK);
+    doc.text('Saldo Mes Anterior',ML+2,y+rh-1.8);
+    doc.setTextColor(...GOLD);doc.text(fmtP(sa)||'$ 0,00',ML+CW-1.5,y+rh-1.8,{align:'right'});
+    y+=rh;
+  }
+  y=totalRow(y,'Total General (Entradas + Saldo Anterior)',tG,GOLD_LT,INK,GOLD);
+  y=dataRow(y,'Total Salidas',tS,7,true,RED_LT,RED,RED);
   y=totalRow(y,'SALDO PRÓXIMO EJERCICIO',sp,[232,248,254],sp>=0?GREEN:RED,sp>=0?GREEN:RED);
+  // Detalle saldo
+  if(v('b_cc')>0||v('b_pf')>0||v('b_ef')>0){
+    y+=3;
+    doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...MUTED);
+    doc.text('Detalle del saldo:',ML+2,y);y+=4;
+    y=dataRow(y,'En Banco — Cuenta Corriente',v('b_cc'),6,false,null,INK,GREEN);
+    y=dataRow(y,'En Banco — Plazo Fijo',v('b_pf'),6,false,null,INK,GREEN);
+    y=dataRow(y,'En Caja Chica (efectivo)',v('b_ef'),6,false,null,INK,GREEN);
+  }
 
   firmasBar([
     ['Rev. de Cuentas Titular',''],
@@ -1210,6 +1264,8 @@ const mesActual=hoy.getMonth(); // 0=enero
 const iniAno=mesActual>=4?hoy.getFullYear():hoy.getFullYear()-1; // si es mayo(4) o posterior
 if(g('an_anio_ini'))g('an_anio_ini').value=iniAno;
 if(g('an_anio_fin'))g('an_anio_fin').value=iniAno+1;
+// Pre-llenar selector de acumular con año actual
+if(g('acum_anio'))g('acum_anio').value=new Date().getFullYear();
 calc();
 cargarAnual(); // restaura el balance anual guardado automáticamente
 </script>
