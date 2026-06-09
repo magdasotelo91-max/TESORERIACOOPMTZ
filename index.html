@@ -257,7 +257,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
     <div class="field full"><label>Escuela / Institución</label><input type="text" id="escuela" placeholder="Ej: E.P. N° 14 José de San Martín"></div>
     <div class="field full"><label>Localidad / Distrito</label><input type="text" id="distrito" placeholder="Ej: San Justo, La Matanza"></div>
     <div class="field"><label>Mes</label>
-      <select id="mes"><option value="">— Mes —</option>
+      <select id="mes" onchange="cambiarMes(this)"><option value="">— Mes —</option>
         <option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option>
         <option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option>
         <option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
@@ -1262,6 +1262,78 @@ async function registrarUso(accion){
   if(wm && src) wm.src = src;
 })();
 
+// ── CAMBIAR MES — copia saldo y limpia entradas/salidas ──
+const CAMPOS_E=['e_cuota','e_don','e_rifa','e_fest','e_kiosc','e_int','e_rein','e_subsi','e_oe1','e_oe2'];
+const CAMPOS_S=['s_ropa','s_lib','s_exc','s_eme','s_pre','s_alf','s_alg','s_did','s_ms','s_mp','s_lim','s_com','s_lbr','s_mob','s_esh','s_esi','s_rg','s_fg','s_kg','s_ed','s_ee','s_oa','s_ob'];
+const LABELS_E=['lbl_oe1','lbl_oe2'];
+const LABELS_S=['lbl_s1f','lbl_s1g','lbl_s2h','lbl_s2i','lbl_s3d','lbl_s3e','lbl_s4a','lbl_s4b'];
+
+let mesAnteriorSeleccionado='';
+
+function cambiarMes(sel){
+  const nuevoMes=sel.value;
+  if(!nuevoMes){mesAnteriorSeleccionado='';return;}
+  // Si no hay ningún dato cargado, simplemente cambiar
+  const hayDatos=CAMPOS_E.concat(CAMPOS_S).some(id=>v(id)>0)||v('saldo_ant')>0;
+  if(!hayDatos){mesAnteriorSeleccionado=nuevoMes;return;}
+  // Guardar el mes anterior para poder revertir si cancela
+  mesAnteriorSeleccionado=nuevoMes;
+  // Calcular el saldo próximo actual para mostrarlo en el modal
+  const tE=CAMPOS_E.reduce((s,id)=>s+v(id),0);
+  const tS=CAMPOS_S.reduce((s,id)=>s+v(id),0);
+  const sa=v('saldo_ant');
+  const sp=tE+sa-tS;
+  // Mostrar modal
+  g('modal-mes-nombre').textContent=nuevoMes;
+  if(g('modal-mes-nombre2'))g('modal-mes-nombre2').textContent=nuevoMes;
+  g('modal-saldo-valor').textContent=fmt(sp);
+  g('modal-nuevo-mes').style.display='flex';
+}
+
+function confirmarNuevoMes(){
+  // Calcular saldo próximo actual
+  const tE=CAMPOS_E.reduce((s,id)=>s+v(id),0);
+  const tS=CAMPOS_S.reduce((s,id)=>s+v(id),0);
+  const sa=v('saldo_ant');
+  const sp=tE+sa-tS;
+  // Copiar saldo próximo → saldo anterior
+  const elSa=g('saldo_ant');
+  if(elSa) elSa.value=sp>0?sp.toFixed(2):'';
+  // Borrar todas las entradas
+  CAMPOS_E.forEach(id=>{const el=g(id);if(el)el.value='';});
+  // Borrar todas las salidas
+  CAMPOS_S.forEach(id=>{const el=g(id);if(el)el.value='';});
+  // Borrar labels libres
+  LABELS_E.concat(LABELS_S).forEach(id=>{const el=g(id);if(el)el.value='';});
+  // Borrar banco/caja
+  ['b_cc','b_pf','b_ef'].forEach(id=>{const el=g(id);if(el)el.value='';});
+  // Cerrar modal y recalcular
+  g('modal-nuevo-mes').style.display='none';
+  calc();
+  toast('✅ Nuevo mes iniciado. Saldo anterior: '+fmt(sp));
+}
+
+function cancelarNuevoMes(){
+  // Revertir el select al mes anterior
+  g('modal-nuevo-mes').style.display='none';
+  // Volver al valor anterior del select
+  const sel=g('mes');
+  // Buscar la opción que coincide con el mes que había antes
+  // (no sabemos cuál era, así que lo dejamos en blanco)
+  sel.value='';
+  mesAnteriorSeleccionado='';
+}
+
+function limpiarMesCompleto(){
+  // Botón "solo limpiar sin copiar saldo"
+  CAMPOS_E.concat(CAMPOS_S).forEach(id=>{const el=g(id);if(el)el.value='';});
+  LABELS_E.concat(LABELS_S).forEach(id=>{const el=g(id);if(el)el.value='';});
+  ['saldo_ant','b_cc','b_pf','b_ef'].forEach(id=>{const el=g(id);if(el)el.value='';});
+  g('modal-nuevo-mes').style.display='none';
+  calc();
+  toast('🗑 Datos del mes borrados');
+}
+
 // Init
 buildAnual();
 g('anio').value=new Date().getFullYear();
@@ -1276,5 +1348,27 @@ if(g('acum_anio'))g('acum_anio').value=new Date().getFullYear();
 calc();
 cargarAnual(); // restaura el balance anual guardado automáticamente
 </script>
+<div id="modal-nuevo-mes" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(42,58,74,.55);align-items:center;justify-content:center;padding:20px">
+  <div style="background:white;border-radius:20px;padding:28px 24px;max-width:420px;width:100%;box-shadow:0 12px 48px rgba(0,0,0,.25)">
+    <div style="font-size:2.2rem;text-align:center;margin-bottom:12px">📅</div>
+    <div style="font-size:1.1rem;font-weight:800;text-align:center;color:#2a3a4a;margin-bottom:8px">Nuevo mes: <span id="modal-mes-nombre" style="color:#5eb8e0"></span></div>
+    <div style="font-size:.9rem;color:#6a8090;text-align:center;margin-bottom:20px;line-height:1.5">Tenés datos del mes anterior cargados.<br>¿Qué querés hacer?</div>
+    <div style="background:#e8f5fc;border-radius:12px;padding:14px 16px;margin-bottom:20px;text-align:center">
+      <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#6a8090;margin-bottom:4px">Saldo Próximo Ejercicio del mes anterior</div>
+      <div style="font-size:1.5rem;font-weight:900;color:#1D9E75" id="modal-saldo-valor">$ 0,00</div>
+      <div style="font-size:.75rem;color:#6a8090;margin-top:4px">Se va a copiar como Saldo Anterior del nuevo mes</div>
+    </div>
+    <button onclick="confirmarNuevoMes()" style="width:100%;padding:13px;background:linear-gradient(135deg,#5eb8e0,#a8d4ee);color:white;border:none;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:800;cursor:pointer;margin-bottom:10px">
+      ✅ Iniciar <span id="modal-mes-nombre2"></span> — copiar saldo y limpiar datos
+    </button>
+    <button onclick="limpiarMesCompleto()" style="width:100%;padding:11px;background:#fdecea;color:#c0392b;border:1.5px solid #f5b7b1;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;margin-bottom:10px">
+      🗑 Limpiar todo (sin copiar saldo)
+    </button>
+    <button onclick="cancelarNuevoMes()" style="width:100%;padding:10px;background:transparent;color:#6a8090;border:1.5px solid #d8e8f0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">
+      Cancelar
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
