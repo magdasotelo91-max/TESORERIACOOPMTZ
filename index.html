@@ -396,141 +396,67 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
     </div>
   </div>
 
-  <!-- Botón acumular mes -->
+  <!-- Explicación simple -->
   <div class="block" style="border-left:4px solid var(--sky1)">
-    <div style="padding:14px 16px 10px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <span style="font-size:22px">➕</span>
+    <div style="padding:14px 16px">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <span style="font-size:22px">💡</span>
         <div>
-          <div style="font-size:.9rem;font-weight:800;color:var(--ink)">Acumular mes al balance anual</div>
-          <div style="font-size:.75rem;color:var(--muted);margin-top:2px">Seleccioná el mes que querés sumar al ejercicio anual</div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--ink)">El balance anual se calcula solo</div>
+          <div style="font-size:.8rem;color:var(--muted);margin-top:3px;line-height:1.5">Cada vez que tocás <strong>Guardar</strong> en el balance mensual, ese mes queda archivado acá. El total anual es la suma automática de todos los meses guardados — no hay que hacer nada más.</div>
         </div>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="field" style="flex:2;margin:0">
-          <select id="acum_mes" style="width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.92rem;background:var(--input-bg);color:var(--ink);-webkit-appearance:none">
-            <option value="">— Mes —</option>
-            <option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option>
-            <option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option>
-            <option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
-          </select>
-        </div>
-        <div class="field" style="flex:1;margin:0">
-          <input type="number" id="acum_anio" placeholder="2025" min="2000" max="2099" style="width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-family:'Nunito',sans-serif;font-size:.92rem;background:var(--input-bg);text-align:center">
-        </div>
-        <button class="acum-btn" onclick="acumularMes()">Agregar</button>
       </div>
     </div>
-    <div id="acum-log" style="padding:0 16px 12px;font-size:.75rem;color:var(--muted);display:none"></div>
+  </div>
+
+  <!-- Saldo del ejercicio anterior -->
+  <div class="block" style="border-left:4px solid var(--gold)">
+    <div style="padding:14px 16px">
+      <div class="rc-lbl" style="margin-bottom:6px">Saldo del Ejercicio Anterior <span style="font-weight:400;color:var(--muted)">(30 de abril del año pasado)</span></div>
+      <div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_saldo_ant" placeholder="0" step="0.01" min="0" oninput="this.dataset.tocado='1';calcAnualBalance()"></div>
+    </div>
   </div>
 
   </div><!-- /res-wrap top anual -->
 
-  <!-- ENTRADAS + SALIDAS ANUALES en 2 columnas en desktop -->
-  <div class="two-col">
-
-  <!-- ENTRADAS ANUALES -->
-  <div class="block" id="blk-ae">
-    <div class="block-head" onclick="toggle('blk-ae')">
-      <span class="block-head-icon">📥</span><span class="block-head-title e">ENTRADAS ANUALES</span>
-      <span class="blk-badge e" id="bdg-ae">$ 0</span><span class="chevron">▼</span>
-    </div>
-    <div class="block-body">
-      <div class="subsec">
-        <div class="subsec-title">Recursos Propios</div>
-        <div class="row"><span class="row-label">a- Cuota Social</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_cuota" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">b- Donación de dinero</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_don" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">c- Rifas</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_rifa" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">d- Festivales</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_fest" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">e- Kiosco</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_kiosc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">f- Intereses bancarios</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_int" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">g- Reintegros banco</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_rein" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-      <div class="subsec">
-        <div class="subsec-title">Recursos Oficiales</div>
-        <div class="row"><span class="row-label">a- Subsidios DGCYE</span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_subsi" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-      <div class="subsec">
-        <div class="subsec-title">Otros Ingresos</div>
-        <div class="row"><span class="row-label"><input class="el" id="aa_lbl_oe1" type="text" placeholder="Descripción…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_oe1" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label"><input class="el" id="aa_lbl_oe2" type="text" placeholder="Descripción…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="aa_oe2" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-    </div>
-    <div class="block-total"><span class="bt-lbl">TOTAL ENTRADAS</span><span class="bt-val" id="aa_tot_e">$ 0,00</span></div>
-  </div>
-
-  <!-- SALIDAS ANUALES -->
-  <div class="block" id="blk-as">
-    <div class="block-head" onclick="toggle('blk-as')">
-      <span class="block-head-icon">📤</span><span class="block-head-title s">SALIDAS ANUALES</span>
-      <span class="blk-badge s" id="bdg-as">$ 0</span><span class="chevron">▼</span>
-    </div>
-    <div class="block-body">
-      <div class="subsec">
-        <div class="subsec-title">Gastos para el Alumno</div>
-        <div class="row"><span class="row-label">a- Ropa y calzado</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ropa" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">b- Libros y útiles</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_lib" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">c- Excursiones</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_exc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">d- Emergencias sanitarias</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_eme" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">e- Golosinas, premios y medallas</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_pre" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-      <div class="subsec">
-        <div class="subsec-title">Gastos para la Escuela</div>
-        <div class="row"><span class="row-label">a- Material didáctico</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_did" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">b- Mant. y mejoras con subsidios</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ms" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">c- Mant. y mejoras con fondos propios</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_mp" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">d- Artículos de limpieza</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_lim" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">e- Combustible y calefacción</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_com" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">f- Librería</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_lbr" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">g- Mobiliario</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_mob" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label"><input class="el" id="as_lbl_h" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_esh" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label"><input class="el" id="as_lbl_i" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_esi" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-      <div class="subsec">
-        <div class="subsec-title">Gastos propios de la Entidad</div>
-        <div class="row"><span class="row-label">a- Organización de rifas</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_rg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">b- Organización de festivales</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_fg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label">c- Kiosco (gasto)</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_kg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label"><input class="el" id="as_lbl_d" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ed" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-      <div class="subsec">
-        <div class="subsec-title">Otros Gastos</div>
-        <div class="row"><span class="row-label"><input class="el" id="as_lbl_oa" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_oa" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="row"><span class="row-label"><input class="el" id="as_lbl_ob" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ob" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-      </div>
-    </div>
-    <div class="block-total r"><span class="bt-lbl">TOTAL SALIDAS</span><span class="bt-val" id="aa_tot_s">$ 0,00</span></div>
-  </div>
-
-  </div><!-- /two-col anual -->
-
+  <!-- Meses guardados -->
   <div class="res-wrap">
+  <div class="block" id="blk-meses">
+    <div class="block-head" onclick="toggle('blk-meses')">
+      <span class="block-head-icon">🗂️</span><span class="block-head-title r">MESES GUARDADOS EN ESTE EJERCICIO</span><span class="chevron">▼</span>
+    </div>
+    <div class="block-body">
+      <div style="padding:14px 16px">
+        <div id="meses-guardados-lista" style="display:flex;flex-direction:column;gap:8px"></div>
+        <div id="meses-vacio" style="display:none;text-align:center;padding:20px;color:var(--muted);font-size:.85rem">Todavía no guardaste ningún mes.<br>Cargá un mes en la pestaña Mensual y tocá <strong>Guardar</strong>.</div>
+      </div>
+    </div>
+  </div>
+  </div>
+
   <!-- RESUMEN ANUAL -->
+  <div class="res-wrap">
   <div class="block" id="blk-ares">
     <div class="block-head" onclick="toggle('blk-ares')">
       <span class="block-head-icon">📊</span><span class="block-head-title r">RESUMEN ANUAL</span><span class="chevron">▼</span>
     </div>
     <div class="block-body">
       <div class="res-grid">
-        <div class="rc gold full"><div class="rc-lbl">Saldo del Ejercicio Anterior</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_saldo_ant" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
-        <div class="rc"><div class="rc-lbl">Total Entradas</div><div class="rc-val" id="aa_r_e">$ 0,00</div></div>
+        <div class="rc"><div class="rc-lbl">Total Entradas (todos los meses)</div><div class="rc-val" id="aa_r_e">$ 0,00</div></div>
+        <div class="rc gold"><div class="rc-lbl">Saldo Ejercicio Anterior</div><div class="rc-val" id="aa_r_sa">$ 0,00</div></div>
         <div class="rc"><div class="rc-lbl">Total General (Entradas + Saldo Ant.)</div><div class="rc-val" id="aa_r_tg">$ 0,00</div></div>
-        <div class="rc red full"><div class="rc-lbl">Total de Salidas</div><div class="rc-val red" id="aa_r_s">$ 0,00</div></div>
+        <div class="rc red full"><div class="rc-lbl">Total de Salidas (todos los meses)</div><div class="rc-val red" id="aa_r_s">$ 0,00</div></div>
         <div class="rc hero"><div class="rc-lbl">SALDO PRÓXIMO EJERCICIO</div><div class="rc-val" id="aa_r_sp">$ 0,00</div></div>
       </div>
-      <div class="subsec" style="margin:0 16px 4px;padding-left:0;padding-right:0"><div class="subsec-title">Detalle del Saldo</div></div>
+      <div class="subsec" style="margin:0 16px 4px;padding-left:0;padding-right:0"><div class="subsec-title">Detalle del Saldo (debe coincidir con Saldo Próximo Ejercicio)</div></div>
       <div class="banco-grid">
         <div class="banco-item"><div class="banco-lbl">🏦 En Banco — Cuenta Corriente</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_cc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="banco-item"><div class="banco-lbl">📈 En Banco — Plazo Fijo</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_pf" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="banco-item"><div class="banco-lbl">💵 En Caja Chica (efectivo)</div><div class="rc-inp"><span class="csym">$</span><input type="number" id="aa_b_ef" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
       </div>
       <div id="saldo-alerta-anual" style="display:none;margin:0 16px 4px;padding:10px 14px;border-radius:10px;font-size:.82rem;font-weight:700"></div>
-      </div>
-      <!-- Meses acumulados -->
       <div style="padding:8px 16px 14px">
-        <div class="subsec-title" style="margin-bottom:8px">Meses acumulados en este ejercicio</div>
-        <div id="meses-acumulados" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-        <button onclick="resetAnual()" style="margin-top:12px;width:100%;padding:10px;border:1.5px solid var(--rose1);border-radius:10px;background:var(--red-lt);color:var(--red);font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer">🗑 Reiniciar ejercicio anual</button>
+        <button onclick="resetAnual()" style="width:100%;padding:10px;border:1.5px solid var(--rose1);border-radius:10px;background:var(--red-lt);color:var(--red);font-family:'Nunito',sans-serif;font-size:.8rem;font-weight:800;cursor:pointer">🗑 Borrar todos los meses guardados de este ejercicio</button>
       </div>
     </div>
   </div>
@@ -611,15 +537,126 @@ const AA_IDS_S=['as_ropa','as_lib','as_exc','as_eme','as_pre','as_did','as_ms','
 const MAP_E={e_cuota:'aa_cuota',e_don:'aa_don',e_rifa:'aa_rifa',e_fest:'aa_fest',e_kiosc:'aa_kiosc',e_int:'aa_int',e_rein:'aa_rein',e_subsi:'aa_subsi',e_oe1:'aa_oe1',e_oe2:'aa_oe2'};
 const MAP_S={s_ropa:'as_ropa',s_lib:'as_lib',s_exc:'as_exc',s_eme:'as_eme',s_pre:'as_pre',s_did:'as_did',s_ms:'as_ms',s_mp:'as_mp',s_lim:'as_lim',s_com:'as_com',s_lbr:'as_lbr',s_mob:'as_mob',s_esh:'as_esh',s_esi:'as_esi',s_rg:'as_rg',s_fg:'as_fg',s_kg:'as_kg',s_ed:'as_ed',s_oa:'as_oa',s_ob:'as_ob'};
 
+// ════════════════════════════════════════════════
+//  BALANCE ANUAL — SISTEMA SIMPLE DE ARCHIVO POR MES
+//  Cada vez que se guarda un mes (botón Guardar), ese
+//  mes queda archivado en MESES_KEY. El anual SIEMPRE
+//  se recalcula sumando todos los meses archivados.
+//  No hay botones de "acumular": es automático.
+// ════════════════════════════════════════════════
+const MESES_KEY='coope_meses_archivados'; // { "Marzo 2024": {datos del mes...}, ... }
+const MESES_ORDEN=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+function getMesesArchivados(){
+  try{return JSON.parse(localStorage.getItem(MESES_KEY)||'{}');}catch{return{};}
+}
+function setMesesArchivados(obj){
+  localStorage.setItem(MESES_KEY,JSON.stringify(obj));
+}
+
+// Archiva el mes actualmente cargado en la pestaña Mensual.
+// Se llama automáticamente cada vez que se toca "Guardar".
+function archivarMesActual(){
+  const mes=g('mes').value, anio=g('anio').value;
+  if(!mes||!anio)return; // sin mes/año no se puede archivar
+  const tag=mes+' '+anio;
+  const meses=getMesesArchivados();
+  // Guarda los valores de entradas/salidas/saldo de ESTE mes bajo su propia clave
+  const datosMes={};
+  Object.keys(MAP_E).concat(Object.keys(MAP_S)).forEach(id=>{
+    const el=g(id); datosMes[id]=el?v(id):0;
+  });
+  datosMes['saldo_ant']=v('saldo_ant');
+  datosMes['anio']=anio;
+  meses[tag]=datosMes;
+  setMesesArchivados(meses);
+  renderMesesGuardados();
+  calcAnualBalance();
+}
+
+function eliminarMesArchivado(tag){
+  if(!confirm('¿Eliminar "'+tag+'" del balance anual?'))return;
+  const meses=getMesesArchivados();
+  delete meses[tag];
+  setMesesArchivados(meses);
+  renderMesesGuardados();
+  calcAnualBalance();
+  toast('🗑 '+tag+' eliminado del balance anual');
+}
+
+function renderMesesGuardados(){
+  const cont=g('meses-guardados-lista');
+  const vacio=g('meses-vacio');
+  if(!cont)return;
+  const meses=getMesesArchivados();
+  const tags=Object.keys(meses);
+  if(tags.length===0){
+    cont.innerHTML='';
+    if(vacio)vacio.style.display='block';
+    return;
+  }
+  if(vacio)vacio.style.display='none';
+  // Ordenar por año y luego por mes calendario
+  tags.sort((a,b)=>{
+    const [ma,aa]=a.split(' '), [mb,ab]=b.split(' ');
+    if(aa!==ab)return aa-ab;
+    return MESES_ORDEN.indexOf(ma)-MESES_ORDEN.indexOf(mb);
+  });
+  cont.innerHTML=tags.map(tag=>{
+    const d=meses[tag];
+    const tE=Object.keys(MAP_E).reduce((s,id)=>s+(d[id]||0),0);
+    const tS=Object.keys(MAP_S).reduce((s,id)=>s+(d[id]||0),0);
+    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--line);border-radius:10px">
+      <div>
+        <div style="font-weight:800;font-size:.85rem;color:var(--ink)">${tag}</div>
+        <div style="font-size:.72rem;color:var(--muted)">Entradas: ${fmt(tE)} · Salidas: ${fmt(tS)}</div>
+      </div>
+      <button onclick="eliminarMesArchivado('${tag}')" style="background:none;border:none;color:var(--red);font-size:1.1rem;cursor:pointer;padding:4px 8px" title="Eliminar este mes">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+// Recalcula TODO el balance anual sumando los meses archivados.
 function calcAnualBalance(){
+  const meses=getMesesArchivados();
+  const tags=Object.keys(meses);
+
+  // Sumar entradas y salidas de TODOS los meses archivados, por categoría
+  Object.values(MAP_E).forEach(am=>{const el=g(am);if(el)el.value='';});
+  Object.values(MAP_S).forEach(am=>{const el=g(am);if(el)el.value='';});
+  const totalesE={}, totalesS={};
+  Object.values(MAP_E).forEach(am=>totalesE[am]=0);
+  Object.values(MAP_S).forEach(am=>totalesS[am]=0);
+
+  tags.forEach(tag=>{
+    const d=meses[tag];
+    Object.entries(MAP_E).forEach(([em,am])=>{totalesE[am]+=(d[em]||0);});
+    Object.entries(MAP_S).forEach(([sm,am])=>{totalesS[am]+=(d[sm]||0);});
+  });
+  Object.entries(totalesE).forEach(([am,val])=>{const el=g(am);if(el)el.value=val?Math.round(val*100)/100:'';});
+  Object.entries(totalesS).forEach(([am,val])=>{const el=g(am);if(el)el.value=val?Math.round(val*100)/100:'';});
+
+  // Saldo del ejercicio anterior: el más antiguo de los meses archivados
+  if(tags.length>0){
+    const tagsOrdenados=[...tags].sort((a,b)=>{
+      const [ma,aa]=a.split(' '), [mb,ab]=b.split(' ');
+      if(aa!==ab)return aa-ab;
+      return MESES_ORDEN.indexOf(ma)-MESES_ORDEN.indexOf(mb);
+    });
+    const primerMes=meses[tagsOrdenados[0]];
+    const elSA=g('aa_saldo_ant');
+    if(elSA && !elSA.dataset.tocado) elSA.value=primerMes.saldo_ant||'';
+  }
+
   const tE=AA_IDS_E.reduce((s,id)=>s+v(id),0);
   const tS=AA_IDS_S.reduce((s,id)=>s+v(id),0);
   const sa=v('aa_saldo_ant'), tG=tE+sa, sp=tG-tS;
-  setT('aa_tot_e',tE); g('bdg-ae').textContent=fmt(tE);
-  setT('aa_tot_s',tS); g('bdg-as').textContent=fmt(tS);
-  setT('aa_r_e',tE); setT('aa_r_tg',tG); setT('aa_r_s',tS); setT('aa_r_sp',sp);
+  setT('aa_tot_e',tE); if(g('bdg-ae'))g('bdg-ae').textContent=fmt(tE);
+  setT('aa_tot_s',tS); if(g('bdg-as'))g('bdg-as').textContent=fmt(tS);
+  setT('aa_r_e',tE); setT('aa_r_sa',sa); setT('aa_r_tg',tG); setT('aa_r_s',tS); setT('aa_r_sp',sp);
   const el=g('aa_r_sp'); if(el) el.classList.toggle('red',sp<0);
-  // Validar detalle del saldo anual
+
+  // Validar detalle del saldo anual (banco + caja)
   const sumBA=v('aa_b_cc')+v('aa_b_pf')+v('aa_b_ef');
   const alertaA=g('saldo-alerta-anual');
   if(alertaA&&(v('aa_b_cc')>0||v('aa_b_pf')>0||v('aa_b_ef')>0)){
@@ -633,103 +670,48 @@ function calcAnualBalance(){
       alertaA.innerHTML='⚠ El detalle (<strong>'+fmt(sumBA)+'</strong>) no coincide con el Saldo Próximo (<strong>'+fmt(sp)+'</strong>). Verificar.';
     }
   } else if(alertaA){alertaA.style.display='none';}
-  guardarAnual();
-}
 
-// ── ACUMULAR MES ──
-function acumularMes(){
-  const mes=g('acum_mes').value||(g('mes').value||'');
-  const anio=g('acum_anio').value||(g('anio').value||new Date().getFullYear());
-  if(!mes){toast('⚠️ Seleccioná un mes para acumular');return;}
-  let acumulados=[];
-  try{acumulados=JSON.parse(localStorage.getItem('coope_anual_meses')||'[]');}catch{}
-  const tag=mes+' '+anio;
-  if(acumulados.includes(tag)){toast('⚠️ '+tag+' ya fue acumulado');return;}
-
-  // Si es el primer mes, copiar el saldo anterior del mensual al anual
-  if(acumulados.length===0){
-    const saldoIni=v('saldo_ant');
-    const el=g('aa_saldo_ant');
-    if(el) el.value=saldoIni||'';
-  }
-
-  // Sumar entradas del mes al acumulado anual
-  for(const[em,am] of Object.entries(MAP_E)){
-    const cur=v(am), add=v(em);
-    const el=g(am); if(el) el.value=Math.round((cur+add)*100)/100||'';
-  }
-  // Sumar salidas del mes al acumulado anual
-  for(const[sm,am] of Object.entries(MAP_S)){
-    const cur=v(am), add=v(sm);
-    const el=g(am); if(el) el.value=Math.round((cur+add)*100)/100||'';
-  }
-
-  acumulados.push(tag);
-  localStorage.setItem('coope_anual_meses',JSON.stringify(acumulados));
-  renderMesesAcumulados(acumulados);
-  calcAnualBalance();
-
-  // Mostrar verificación: el saldo del anual debe coincidir con el saldo_ant del próximo mes
-  const tE=AA_IDS_E.reduce((s,id)=>s+v(id),0);
-  const tS=AA_IDS_S.reduce((s,id)=>s+v(id),0);
-  const sa=v('aa_saldo_ant');
-  const saldoAnual=Math.round((tE+sa-tS)*100)/100;
-  const saldoMensual=Math.round((v('saldo_ant')+v('e_cuota')+v('e_don')+v('e_rifa')+v('e_fest')+v('e_kiosc')+v('e_int')+v('e_rein')+v('e_subsi')+v('e_oe1')+v('e_oe2')-(v('s_ropa')+v('s_lib')+v('s_exc')+v('s_eme')+v('s_pre')+v('s_alf')+v('s_alg')+v('s_did')+v('s_ms')+v('s_mp')+v('s_lim')+v('s_com')+v('s_lbr')+v('s_mob')+v('s_esh')+v('s_esi')+v('s_rg')+v('s_fg')+v('s_kg')+v('s_ed')+v('s_ee')+v('s_oa')+v('s_ob')))*100)/100;
-
-  const log=g('acum-log');
-  log.style.display='block';
-  const coincide=Math.abs(saldoAnual-saldoMensual)<0.05;
-  log.innerHTML=`✅ <strong>${tag}</strong> acumulado. Saldo próximo ejercicio anual: <strong>${fmt(saldoAnual)}</strong> ${coincide?'<span style="color:var(--green)">✔ coincide con el mensual</span>':'<span style="color:var(--red)">⚠ verificar</span>'}`;
-  toast('✅ '+tag+' acumulado al balance anual');
-}
-
-function renderMesesAcumulados(arr){
-  const c=g('meses-acumulados');
-  if(!c)return;
-  if(!arr||arr.length===0){c.innerHTML='<span style="color:var(--muted);font-size:.78rem">Ningún mes acumulado todavía</span>';return;}
-  c.innerHTML=arr.map(m=>`<span class="mes-tag">${m}</span>`).join('');
-}
-
-// ── GUARDAR / CARGAR ANUAL con localStorage ──
-function guardarAnual(){
-  const d={};
-  [...AA_IDS_E,...AA_IDS_S,'aa_saldo_ant','aa_b_cc','aa_b_pf','aa_b_ef','an_anio_ini','an_anio_fin'].forEach(id=>{
-    const el=g(id); if(el) d[id]=el.value;
-  });
-  // También labels
-  ['aa_lbl_oe1','aa_lbl_oe2','as_lbl_h','as_lbl_i','as_lbl_d','as_lbl_oa','as_lbl_ob'].forEach(id=>{
-    const el=g(id); if(el) d[id]=el.value;
-  });
-  localStorage.setItem('coope_anual_data',JSON.stringify(d));
-}
-
-function cargarAnual(){
-  try{
-    const raw=localStorage.getItem('coope_anual_data');
-    if(!raw)return;
-    const d=JSON.parse(raw);
-    Object.entries(d).forEach(([id,val])=>{const el=g(id);if(el)el.value=val;});
-    const meses=JSON.parse(localStorage.getItem('coope_anual_meses')||'[]');
-    renderMesesAcumulados(meses);
-    calcAnualBalance();
-  }catch{}
+  guardarConfigAnual();
 }
 
 function resetAnual(){
-  if(!confirm('¿Reiniciar el ejercicio anual? Se borrarán todos los datos anuales acumulados.'))return;
-  [...AA_IDS_E,...AA_IDS_S,'aa_saldo_ant','aa_b_cc','aa_b_pf','aa_b_ef'].forEach(id=>{
-    const el=g(id); if(el) el.value='';
-  });
-  localStorage.removeItem('coope_anual_data');
-  localStorage.removeItem('coope_anual_meses');
-  renderMesesAcumulados([]);
+  if(!confirm('¿Borrar todos los meses guardados de este ejercicio? Esta acción no se puede deshacer.'))return;
+  localStorage.removeItem(MESES_KEY);
+  ['aa_b_cc','aa_b_pf','aa_b_ef'].forEach(id=>{const el=g(id);if(el)el.value='';});
+  const elSA=g('aa_saldo_ant'); if(elSA){elSA.value='';delete elSA.dataset.tocado;}
+  renderMesesGuardados();
   calcAnualBalance();
   toast('🗑 Ejercicio anual reiniciado');
 }
 
-// Mantener compatibilidad con funciones antiguas
+// Guarda solo la configuración del anual (período y banco/caja), no los montos
+// porque esos se recalculan siempre desde los meses archivados.
+function guardarConfigAnual(){
+  const d={};
+  ['aa_saldo_ant','aa_b_cc','aa_b_pf','aa_b_ef','an_anio_ini','an_anio_fin'].forEach(id=>{
+    const el=g(id); if(el) d[id]=el.value;
+  });
+  localStorage.setItem('coope_anual_config',JSON.stringify(d));
+}
+function cargarConfigAnual(){
+  try{
+    const raw=localStorage.getItem('coope_anual_config');
+    if(raw){
+      const d=JSON.parse(raw);
+      Object.entries(d).forEach(([id,val])=>{
+        const el=g(id);if(el){el.value=val; if(id==='aa_saldo_ant'&&val)el.dataset.tocado='1';}
+      });
+    }
+  }catch{}
+  renderMesesGuardados();
+  calcAnualBalance();
+}
+
+// Mantener compatibilidad con llamadas antiguas en el HTML
 function buildAnual(){}
 function calcAnual(){calcAnualBalance();}
+function guardarAnual(){guardarConfigAnual();}
+function cargarAnual(){cargarConfigAnual();}
 
 // ── GUARDAR / CARGAR ──
 // IMPORTANTE: collectAll excluye campos del anual (aa_*, as_*) para no pisarlos
@@ -760,14 +742,15 @@ function autocargar(){
   }catch(e){}
 }
 
-// Guardar = autoguarda en navegador + descarga JSON de respaldo
+// Guardar = autoguarda en navegador + ARCHIVA el mes en el anual + descarga JSON de respaldo
 function guardar(){
   autoguardar();
+  archivarMesActual();
   const a=document.createElement('a');
   const mes=g('mes').value||'mes',anio=g('anio').value||'';
   a.href=URL.createObjectURL(new Blob([JSON.stringify(collectAll(),null,2)],{type:'application/json'}));
   a.download=`balance_${mes}_${anio}.json`;a.click();
-  toast('💾 Guardado. También se descargó un archivo de respaldo.');
+  toast('💾 Guardado y archivado en el balance anual.');
 }
 // Recuperar = recupera desde archivo JSON de respaldo (solo campos mensuales)
 function cargar(){
