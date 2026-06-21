@@ -443,6 +443,8 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
         <div class="row"><span class="row-label">c- Excursiones</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_exc" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="row"><span class="row-label">d- Emergencias sanitarias</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_eme" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="row"><span class="row-label">e- Golosinas, premios y medallas</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_pre" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="row"><span class="row-label"><input class="el" id="as_lbl_f" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_alf" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="row"><span class="row-label"><input class="el" id="as_lbl_g" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_alg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
       </div>
       <div class="subsec">
         <div class="subsec-title">Gastos para la Escuela</div>
@@ -462,6 +464,7 @@ table.anual input.ac:focus{outline:none;border-color:var(--sky1);background:whit
         <div class="row"><span class="row-label">b- Organización de festivales</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_fg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="row"><span class="row-label">c- Kiosco (gasto)</span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_kg" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
         <div class="row"><span class="row-label"><input class="el" id="as_lbl_d" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ed" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
+        <div class="row"><span class="row-label"><input class="el" id="as_lbl_e" type="text" placeholder="Descripción libre…"></span><div class="row-amount"><span class="csym">$</span><input type="number" id="as_ee" placeholder="0" step="0.01" min="0" oninput="calcAnualBalance()"></div></div>
       </div>
       <div class="subsec">
         <div class="subsec-title">Otros Gastos</div>
@@ -550,11 +553,11 @@ function calc(){
 
 // ── BALANCE ANUAL — lógica acumulativa con storage ──
 const AA_IDS_E=['aa_cuota','aa_don','aa_rifa','aa_fest','aa_kiosc','aa_int','aa_rein','aa_subsi','aa_oe1','aa_oe2'];
-const AA_IDS_S=['as_ropa','as_lib','as_exc','as_eme','as_pre','as_did','as_ms','as_mp','as_lim','as_com','as_lbr','as_mob','as_esh','as_esi','as_rg','as_fg','as_kg','as_ed','as_oa','as_ob'];
+const AA_IDS_S=['as_ropa','as_lib','as_exc','as_eme','as_pre','as_alf','as_alg','as_did','as_ms','as_mp','as_lim','as_com','as_lbr','as_mob','as_esh','as_esi','as_rg','as_fg','as_kg','as_ed','as_ee','as_oa','as_ob'];
 
 // Mapeo mensual → anual (mismas categorías)
 const MAP_E={e_cuota:'aa_cuota',e_don:'aa_don',e_rifa:'aa_rifa',e_fest:'aa_fest',e_kiosc:'aa_kiosc',e_int:'aa_int',e_rein:'aa_rein',e_subsi:'aa_subsi',e_oe1:'aa_oe1',e_oe2:'aa_oe2'};
-const MAP_S={s_ropa:'as_ropa',s_lib:'as_lib',s_exc:'as_exc',s_eme:'as_eme',s_pre:'as_pre',s_did:'as_did',s_ms:'as_ms',s_mp:'as_mp',s_lim:'as_lim',s_com:'as_com',s_lbr:'as_lbr',s_mob:'as_mob',s_esh:'as_esh',s_esi:'as_esi',s_rg:'as_rg',s_fg:'as_fg',s_kg:'as_kg',s_ed:'as_ed',s_oa:'as_oa',s_ob:'as_ob'};
+const MAP_S={s_ropa:'as_ropa',s_lib:'as_lib',s_exc:'as_exc',s_eme:'as_eme',s_pre:'as_pre',s_alf:'as_alf',s_alg:'as_alg',s_did:'as_did',s_ms:'as_ms',s_mp:'as_mp',s_lim:'as_lim',s_com:'as_com',s_lbr:'as_lbr',s_mob:'as_mob',s_esh:'as_esh',s_esi:'as_esi',s_rg:'as_rg',s_fg:'as_fg',s_kg:'as_kg',s_ed:'as_ed',s_ee:'as_ee',s_oa:'as_oa',s_ob:'as_ob'};
 
 function calcAnualBalance(){
   const tE=AA_IDS_E.reduce((s,id)=>s+v(id),0);
@@ -627,7 +630,7 @@ function guardarAnual(){
     const el=g(id); if(el) d[id]=el.value;
   });
   // También labels
-  ['aa_lbl_oe1','aa_lbl_oe2','as_lbl_h','as_lbl_i','as_lbl_d','as_lbl_oa','as_lbl_ob'].forEach(id=>{
+  ['aa_lbl_oe1','aa_lbl_oe2','as_lbl_f','as_lbl_g','as_lbl_h','as_lbl_i','as_lbl_d','as_lbl_e','as_lbl_oa','as_lbl_ob'].forEach(id=>{
     const el=g(id); if(el) d[id]=el.value;
   });
   localStorage.setItem('coope_anual_data',JSON.stringify(d));
@@ -648,6 +651,9 @@ function cargarAnual(){
 function resetAnual(){
   if(!confirm('¿Reiniciar el ejercicio anual? Se borrarán todos los datos anuales acumulados.'))return;
   [...AA_IDS_E,...AA_IDS_S,'aa_saldo_ant','aa_b_cc','aa_b_pf','aa_b_ef'].forEach(id=>{
+    const el=g(id); if(el) el.value='';
+  });
+  ['aa_lbl_oe1','aa_lbl_oe2','as_lbl_f','as_lbl_g','as_lbl_h','as_lbl_i','as_lbl_d','as_lbl_e','as_lbl_oa','as_lbl_ob'].forEach(id=>{
     const el=g(id); if(el) el.value='';
   });
   localStorage.removeItem('coope_anual_data');
