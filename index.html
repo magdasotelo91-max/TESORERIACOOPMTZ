@@ -571,6 +571,10 @@ function calcAnualBalance(){
 }
 
 // ── ACUMULAR MES ──
+const MENSUAL_E_IDS=Object.keys(MAP_E);
+const MENSUAL_S_IDS=Object.keys(MAP_S);
+const MENSUAL_LBL_IDS=['lbl_oe1','lbl_oe2','lbl_s1f','lbl_s1g','lbl_s2h','lbl_s2i','lbl_s3d','lbl_s3e','lbl_s4a','lbl_s4b'];
+
 function acumularMes(){
   const mes=g('mes').value, anio=g('anio').value;
   if(!mes){toast('⚠️ Seleccioná un mes primero');return;}
@@ -608,13 +612,32 @@ function acumularMes(){
   const sa=v('aa_saldo_ant');
   const saldoAnual=Math.round((tE+sa-tS)*100)/100;
   const saldoMensual=Math.round((v('saldo_ant')+v('e_cuota')+v('e_don')+v('e_rifa')+v('e_fest')+v('e_kiosc')+v('e_int')+v('e_rein')+v('e_subsi')+v('e_oe1')+v('e_oe2')-(v('s_ropa')+v('s_lib')+v('s_exc')+v('s_eme')+v('s_pre')+v('s_alf')+v('s_alg')+v('s_did')+v('s_ms')+v('s_mp')+v('s_lim')+v('s_com')+v('s_lbr')+v('s_mob')+v('s_esh')+v('s_esi')+v('s_rg')+v('s_fg')+v('s_kg')+v('s_ed')+v('s_ee')+v('s_oa')+v('s_ob')))*100)/100;
+  const coincide=Math.abs(saldoAnual-saldoMensual)<0.05;
 
   const log=g('acum-log');
   log.style.display='block';
-  const coincide=Math.abs(saldoAnual-saldoMensual)<0.05;
   log.innerHTML=`✅ <strong>${tag}</strong> acumulado. Saldo próximo ejercicio anual: <strong>${fmt(saldoAnual)}</strong> ${coincide?'<span style="color:var(--green)">✔ coincide con el mensual</span>':'<span style="color:var(--red)">⚠ verificar</span>'}`;
   toast('✅ '+tag+' acumulado al balance anual');
+
+  // ── Limpiar el formulario mensual para cargar el próximo mes ──
+  // El saldo próximo ejercicio del mes recién acumulado pasa a ser
+  // el "Saldo Mes Anterior" del mes siguiente.
+  const saldoProximoMes=saldoMensual;
+
+  MENSUAL_E_IDS.forEach(id=>{const el=g(id); if(el) el.value='';});
+  MENSUAL_S_IDS.forEach(id=>{const el=g(id); if(el) el.value='';});
+  MENSUAL_LBL_IDS.forEach(id=>{const el=g(id); if(el) el.value='';});
+  ['b_cc','b_pf','b_ef'].forEach(id=>{const el=g(id); if(el) el.value='';});
+
+  const saldoAntEl=g('saldo_ant');
+  if(saldoAntEl) saldoAntEl.value=Math.round(saldoProximoMes*100)/100;
+
+  // Limpiar selector de mes para forzar elegir el próximo (año se mantiene)
+  g('mes').value='';
+
+  calc(); // recalcular el formulario mensual ya vacío con el nuevo saldo anterior
 }
+
 
 function renderMesesAcumulados(arr){
   const c=g('meses-acumulados');
@@ -1081,7 +1104,7 @@ function generarPDFAnual(){
 
   // Valores
   const tE=v('aa_cuota')+v('aa_don')+v('aa_rifa')+v('aa_fest')+v('aa_kiosc')+v('aa_int')+v('aa_rein')+v('aa_subsi')+v('aa_oe1')+v('aa_oe2');
-  const tS=v('as_ropa')+v('as_lib')+v('as_exc')+v('as_eme')+v('as_pre')+v('as_did')+v('as_ms')+v('as_mp')+v('as_lim')+v('as_com')+v('as_lbr')+v('as_mob')+v('as_esh')+v('as_esi')+v('as_rg')+v('as_fg')+v('as_kg')+v('as_ed')+v('as_oa')+v('as_ob');
+  const tS=v('as_ropa')+v('as_lib')+v('as_exc')+v('as_eme')+v('as_pre')+v('as_alf')+v('as_alg')+v('as_did')+v('as_ms')+v('as_mp')+v('as_lim')+v('as_com')+v('as_lbr')+v('as_mob')+v('as_esh')+v('as_esi')+v('as_rg')+v('as_fg')+v('as_kg')+v('as_ed')+v('as_ee')+v('as_oa')+v('as_ob');
   const sa=v('aa_saldo_ant'), tG=tE+sa, sp=tG-tS;
 
   // ═══ HOJA 1: ENTRADAS + RESUMEN ANUAL ═══
@@ -1142,6 +1165,8 @@ function generarPDFAnual(){
       ['a- Emergencias sanitarias',v('as_eme')],['b- Excursiones',v('as_exc')],
       ['c- Golosinas, premios y medallas',v('as_pre')],['d- Ropa y calzado',v('as_ropa')],
       ['e- Libros y útiles',v('as_lib')],
+      ['f- '+(g('as_lbl_f')?.value||'(libre)'),v('as_alf')],
+      ['g- '+(g('as_lbl_g')?.value||'(libre)'),v('as_alg')],
     ],
     'Gastos para la Escuela':[
       ['a- Material didáctico',v('as_did')],['b- Mant. y mejoras con subsidios',v('as_ms')],
@@ -1155,6 +1180,7 @@ function generarPDFAnual(){
       ['a- Organización de rifas',v('as_rg')],['b- Organización de festivales',v('as_fg')],
       ['c- Kiosco (gasto)',v('as_kg')],
       ['d- '+(g('as_lbl_d')?.value||'(libre)'),v('as_ed')],
+      ['e- '+(g('as_lbl_e')?.value||'(libre)'),v('as_ee')],
     ],
     'Otros Gastos':[
       ['a- '+(g('as_lbl_oa')?.value||'(libre)'),v('as_oa')],
